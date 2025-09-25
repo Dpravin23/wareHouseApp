@@ -1,0 +1,251 @@
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<title>Register Order Method </title>
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:insert="fragments/commonui :: userhead"></div>
+<div th:insert="fragments/commonui :: usermenu"> </div>
+	<div class="container">
+	   
+		<div class="card-header">
+			<h3 style="font-family: Lucida Console, Courier New, monospace;color:White;">Order Method Register</h3>
+		</div>
+		<div class="card">
+		<div class="card-body">
+			<form th:action="@{/ordermethod/save}" method="POST"
+				th:object="${orderMethod}" id="omregform">
+				<!-- -----ROW1----- -->
+				<div class="row">
+					<div class="col-2">
+						<label for="orderMode">Order Mode</label>
+					</div>
+
+					<div class="col-2">
+						<input type="radio" th:field="*{orderMode}" name="omgroup" value="sale" />Sale <input
+							type="radio" th:field="*{orderMode}" name="omgroup" value="purchase" />Purchase
+					</div>
+					<div class="col-2">
+					<span id="OrderModeErr"></span>
+					</div>
+				</div>
+				<!-- ROW2 -->
+				<div class="row">
+					<div class="col-2">
+						<label for="orderCode">Order Code</label>
+					</div>
+					<div class="col-2">
+						<input type="text" th:field="*{orderCode}" id="OrderCode" class="form-control" />
+					</div>
+					<div class="col-2">
+					<span id="OrderCodeErr"></span>
+					</div>
+				</div>
+				<!-- ROW3 -->
+				<div class="row">
+					<div class="col-2">
+						<label for="orderType">Order Type</label>
+					</div>
+					<div class="col-2">
+						<select th:field="*{orderType}" id="OrderType" class="form-control">
+							<option value="">-SELECT-</option>
+							<option value="FIFO">FIFO</option>
+							<option value="LIFO">LIFO</option>
+							<option value="FCFO">FCFO</option>
+							<option value="FEFO">FEFO</option>
+						</select>
+				  </div>
+				  <div class="col-2">
+					<span id="OrderTypeErr"></span>
+					</div>
+				</div>
+				<!-- ROW4 -->
+				<div class="row">
+					<div class="col-2">
+						<label for="orderAccept">Order Accept</label>
+					</div>
+					<div class="col-2">
+						<input type="checkbox" th:field="*{orderAccept} " name="OrderAccept"
+							value="Multi-Model" />Multi-Model
+							 <br> 
+					    <input type="checkbox"
+							th:field="*{orderAccept}"  name="OrderAccept" value="Accept Return" />Accept Return
+					</div>
+					<div class="col-2">
+					<span id="OrderAcceptErr"></span>
+					</div>
+				</div>
+				<!-- ROW5 -->
+				<div class="row">
+					<div class="col-2">
+						<label for="description">Description </label>
+					</div>
+					<div class="col-2">
+						<textarea th:field="*{description}" id="description" class="form-control"></textarea>
+
+					</div>
+					<div class="col-2">
+					<span id="descriptionErr"></span>
+					</div>
+					
+				</div>
+				<input type="submit" value="Create Order Method"
+						class="btn btn-success">
+			</form>
+		</div>
+		</div>
+		</div>
+		<!-- body end -->
+
+		<div th:if="${message} !=null">
+			<div class="card-footer bg-info text-white text-center">
+				<span th:text="${message}"></span>
+			</div>
+		</div>
+       
+	<script> 
+	 $(document).ready(function () {
+			//1.hide error section
+			$("#OrderModeErr").hide();
+			$("#OrderCodeErr").hide();
+			$("#OrderTypeErr").hide();
+			$("#OrderAcceptErr").hide();
+			$("#descriptionErr").hide();
+			
+
+			//2.define error flag and assign with false
+			var OrderModeErr = false;
+			var OrderCodeErr = false;
+			var OrderTypeErr = false;
+			var OrderAcceptErr = false;
+			var descriptionErr = false;
+
+			//3.link input with event
+			
+			$("input[type='radio']").click(function () {
+				$("#OrderModeErr").hide();
+			});
+			
+           $("#OrderCode").keyup(function () {
+				validate_OrderCode();
+			});
+			
+            $("#OrderType").click(function (){
+             $("#OrderTypeErr").hide();
+            });
+            
+            $("input[type='checkbox']").click(function(){
+              $("#OrderAcceptErr").hide();
+            });
+            
+            
+          	$("#description").keyup(function () {
+				$("#descriptionErr").hide();
+				
+			});
+			
+
+			//4.define fun for data validation
+			function validate_OrderMode() {
+				//read text input 
+
+				var x= $("input[type='radio']:checked");      
+				if (x.length >0 ) {
+				$("#OrderModeErr").hide();
+					OrderModeErr = true;
+				} else {
+					
+					$("#OrderModeErr").show();
+
+					$("#OrderModeErr").html("select <b> Order Mode<b>");
+
+					$("#OrderModeErr").css('color', 'red');
+                    OrderModeErr = false;
+				}
+				return OrderModeErr;
+			}
+			function validate_OrderCode() {
+
+				var val = $("#OrderCode").val();
+				if (val == '') {
+					$("#OrderCodeErr").show();
+
+					$("#OrderCodeErr").html("enter <b> Order Code<b>");
+
+					$("#OrderCodeErr").css('color', 'red');
+					OrderCodeErr = false;
+				} else {
+					$("#OrderCodeErr").hide();
+					OrderCodeErr = true;
+				}
+				return OrderCodeErr;
+			}
+
+			function validate_OrderType() {
+				var val = $("#OrderType option:selected").val();
+				if (val == '') {
+					$("#OrderTypeErr").show();
+
+					$("#OrderTypeErr").html("select  <b> Order Type<b>");
+
+					$("#OrderTypeErr").css('color', 'red');
+					OrderTypeErr = false;
+				} else {
+					$("#OrderTypeErr").hide();
+					OrderTypeErr = true;
+				}
+				return OrderTypeErr;
+			}
+			function validate_OrderAccpet() {
+				//read text input 
+
+				var x= $("input[type='checkbox']:checked");      
+				if (x.length >0 ) {
+				$("#OrderAcceptErr").hide();
+					OrderAcceptErr = true;
+				} else {
+					
+					$("#OrderAcceptErr").show();
+
+					$("#OrderAcceptErr").html("select <b> Order Accpet Type<b>");
+
+					$("#OrderAcceptErr").css('color', 'red');
+                    OrderAcceptErr = false;
+				}
+				return OrderAcceptErr;
+			}
+			function validate_description() {
+
+				var val = $("#description").val();
+				if (val == '') {
+					$("#descriptionErr").show();
+
+					$("#descriptionErr").html("Enter <b>Order Description<b>");
+
+					$("#descriptionErr").css('color', 'red');
+					descriptionError = false;
+				} else {
+					$("#descriptionErr").hide();
+					descriptionErr = true;
+				}
+				return descriptionErr;
+			}
+			//form submit
+			$("#omregform").submit(function () {
+				validate_OrderMode();
+				validate_OrderCode();
+				validate_OrderType(); 
+				validate_OrderAccpet(); 
+				validate_description();
+				if (OrderModeErr && OrderCodeErr && OrderTypeErr &&  OrderAcceptErr &&  descriptionErr )
+					return true;//valid data
+				else
+					return false;//invalid data
+
+			});
+
+		});
+	</script>
+<!-- container end -->
+</body>
+</html>

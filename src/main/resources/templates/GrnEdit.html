@@ -1,0 +1,192 @@
+<html xmlns:th="https://www.thymeleaf.org/">
+<head><link rel="stylesheet" th:href="@{/css/styles.css}"></head>
+
+<body>
+
+<div th:insert="fragments/commonui :: userhead"></div>
+<div th:insert="fragments/commonui :: usermenu"> </div>
+	<div class="container">
+		
+			<div class="card-header">
+				<h3 style="font-family: Lucida Console, Courier New, monospace;color:White;">Edit GRN </h3>
+			</div>
+			<div class="card">
+			<div class="card-body">
+				<form th:action="@{/grn/update}" method="POST"
+				th:object="${grn}" id="grnupdateform">
+				<!-- ROW1 -->
+				<div class="row">
+					<div class="col-4">
+						<label for="id">Grn ID</label>
+					</div>
+					<div class="col-4">
+						<input type="text" th:field="*{id}" readonly="readonly">
+					</div>
+				</div>
+					<!--  ---ROW1--- -->
+					<div class="row">
+						<div class="col-4">
+							<label for="GrnCode">GRN CODE</label>
+						</div>
+						<div class="col-4">
+							<input type="text" th:field=*{grnCode} class="form-control">
+						</div>
+						<div class="col-4">
+							<span id="grnCodeErr"></span>
+						</div>
+					</div>
+
+					<!--  ---ROW2--- -->
+					<div class="row">
+						<div class="col-4">
+							<label for="grntype">GRN TYPE</label>
+						</div>
+						<div class="col-4">
+							<input type="text"  th:field="*{grnType}"
+								class="form-control">
+						</div>
+						<div class="col-4">
+							<span id="grmTypelErr"></span>
+						</div>
+					</div>
+					<!--  ---ROW2--- -->
+					<div class="row">
+						<div class="col-4">
+							<label for="purchaseCode">Order Code</label>
+						</div>
+						<div class="col-4">
+							<select th:field=*{po.id} class="form-control">
+							<option value="">-SELECT-</option>
+							<option th:each="ob:${pos}" th:value="${ob.key}" th:text="${ob.value}"></option>
+							</select>
+								
+						</div>
+						<div class="col-4">
+							<span id="ordercdoeErr"></span>
+						</div>
+					</div>
+					
+
+					<!--  ---ROW3--- -->
+					<div class="row">
+						<div class="col-4">
+							<label for="description">Description </label>
+						</div>
+						<div class="col-4">
+							<textarea name="description" id="description" th:field="*{description}"
+								class="form-control"></textarea>
+						</div>
+						<div class="col-4">
+							<span id="descriptionErr"></span>
+						</div>
+					</div>
+
+					<input type="submit" class="btn btn-success btn-center" value="Create GRN" />
+				</form>
+			</div>
+	   </div>
+			<!-- card footer section -->
+			<div th:if="${message} !=null">
+				<div class="card-footer bg-info text-white text-center">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+		</div>
+
+	<script>
+		$(document).ready(function () {
+			//1.hide error section
+			$("#uomModelErr").hide();
+			$("#descriptionErr").hide();
+			$("#uomModeErr").hide();
+
+			//2.define error flag and assign with false
+			var uomModelErr = false;
+			var descriptionErr = false;
+			var uomModeErr = false;
+
+			//3.link input with event
+			$("#uomModel").keyup(function () {
+				validate_uomModel();
+			});
+
+			$("#description").keyup(function () {
+				validate_description();
+			});
+			$("#uomMode").click(function () {
+				$("#uomModeErr").hide();
+			});
+
+
+
+			//4.define fun for data validation
+			function validate_uomModel() {
+				//read text input 
+
+				var val = $("#uomModel").val();
+				if (val == '') {
+					$("#uomModelErr").show();
+
+					$("#uomModelErr").html("enter <b> UOM MODEL<b>");
+
+					$("#uomModelErr").css('color', 'red');
+
+
+					uomModelErr = false;
+				} else {
+					$("#uomModelErr").hide();
+					uomModelErr = true;
+				}
+				return uomModelErr;
+			}
+			function validate_description() {
+
+				var val = $("#description").val();
+				if (val == '') {
+					$("#descriptionErr").show();
+
+					$("#descriptionErr").html("enter <b> Descripion<b>");
+
+					$("#descriptionErr").css('color', 'red');
+					descriptionErr = false;
+				} else {
+					$("#descriptionErr").hide();
+					descriptionErr = true;
+				}
+				return descriptionErr;
+			}
+
+			function validate_uomMode() {
+				var val = $("#uomMode option:selected").val();
+				if (val == '') {
+					$("#uomModeErr").show();
+
+					$("#uomModeErr").html("select  <b> UOM Mode<b>");
+
+					$("#uomModeErr").css('color', 'red');
+					uomModeErr = false;
+				} else {
+					$("#uomModeErr").hide();
+					uomModeErr = true;
+				}
+				return uomModeErr;
+			}
+			//form submit
+			$("#uomForm").submit(function () {
+				validate_uomModel();
+				validate_uomMode();
+				validate_description();
+				if (uomModelErr && descriptionErr && uomModeErr)
+					return true;//valid data
+				else
+					return false;//invalid data
+
+			});
+
+		});
+
+
+	</script>
+</body>
+
+</html>

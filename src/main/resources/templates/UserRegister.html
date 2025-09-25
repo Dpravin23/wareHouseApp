@@ -1,0 +1,112 @@
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+<title>USER REGISTER</title>
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+  
+	<div th:insert="fragments/commonui :: userhead"></div>
+	<div th:if="${session.userOb.userRoles.contains('ADMIN')} " 
+	     th:insert="fragments/commonui :: adminmenu"
+	     ></div>
+	<div class="container">
+		
+			<div class="card-header">
+				<h3 style="font-family: Lucida Console, Courier New, monospace;color:White;">USER REGISTRATION</h3>
+			</div>
+			<div class="card">
+			<div class="card-body">
+				<form th:action="@{/user/save}" method="POST" th:object="${user}"
+					id="userregform">
+					<!-- -----ROW1----- -->
+					<div class="row">
+						<div class="col-2">
+							<label for="userName">User Name</label>
+						</div>
+						<div class="col-3">
+							<input type="text" th:field="*{userName}" class="form-control" />
+						</div>
+						<div class="col-2">
+							<span id="userNameErr"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<label for="email">User Email</label>
+						</div>
+						<div class="col-3">
+							<input type="text" th:field="*{email}" class="form-control" />
+						</div>
+						<div class="col-2">
+							<span id="emailErr"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<label for="password">Password</label>
+						</div>
+						<div class="col-3">
+							<input type="password" th:field="*{password}" id="password" name="password" class="form-control" />
+						</div>
+						<div class="col-4">
+						<span id="passwordError"></span>
+						 </div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<label for="cpassword">Confirm Password</label>
+						</div>
+						<div class="col-3">
+							<input type="password" id="cpassword"  name="cpassword" class="form-control" />
+						</div>
+						<div class="col-3">
+						<span id="cpasswordError"></span>
+						 </div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<label for="userRoles">Roles</label>
+						</div>
+						<div class="col-2">
+							<input type="checkbox" th:field="*{userRoles} " name="userRoles"
+								value="ADMIN" />ADMIN  <input type="checkbox"
+								th:field="*{userRoles}" name="userRoles" value="EMPLOYEE" />EMPLOYEE
+						</div>
+					</div>
+
+					<input type="submit"  value="Add User" class="btn btn-success btn-center">
+				</form>
+			</div>
+			<!-- card footer section -->
+			<div th:if="${message} !=null">
+				<div class="card-footer bg-info text-white text-center">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+	
+	  $("#userregform").submit(function(){
+	    
+	    var pwd = $("#password").val();
+	    var cpwd = $("#cpassword").val();
+	      if(pwd!=cpwd){
+	        $("#cpasswordError").show();
+	        $("#cpasswordError").html("password not matched");
+	        $("#cpasswordError").css("color","red");
+            return false;
+	      }else{
+	              $("#cpasswordError").hide();
+	              return true; 
+	      }
+	  });
+	});
+   		
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div th:insert="fragments/commonui :: userhead"></div>
+<div th:insert="fragments/commonui :: usermenu"> </div>
+<div class="card-header"> 
+<h3 style="font-family: Lucida Console, Courier New, monospace;color:White;">WH USER TYPE DATA </h3>
+</div>
+<div class="card-body">
+
+<table class="table "style="font-family: Lucida Console, Courier New, monospace;color:White;">
+  <tr>
+    <th>ID</th>
+    <th>TYPE</th>
+    <th>Code</th>
+    <th>OPERATION</th>
+    <th><a th:href="@{/whuserType/excel}" ><img th:src="@{/excel.png}" width="50" height="50" data-toggle="tooltip" data-placment="right" title="Export-To-Excel" /></a></th>
+    <!-- <th>Type</th>
+    <th>Accept</th>
+    <th>Description</th>
+    <th>Operation</th> -->
+  </tr>
+  <tr th:each="ob:${list}">
+   <td th:text="${ob.id}"></td>
+   <td th:text="${ob.userType}"></td>
+    <td th:text="${ob.userCode}"></td>
+  <!--   <td th:text="${ob.orderType}"></td>
+    <td th:text="${ob.orderAccept}"></td>
+    <td th:text="${ob.description}"></td> -->
+    <td>
+      <a th:href="@{/whuserType/edit/{id}(id=${ob.id})}" class="btn btn-success">EDIT</a>
+      <a th:href="@{/whuserType/delete/{id}(id=${ob.id})}" class="btn btn-danger">DELETE</a>
+      <a th:href="@{/whuserType/view/{id}(id=${ob.id})}" class="btn btn-dark">VIEW</a>
+    </td>
+    </tr>
+</table>
+</div>
+<div class="card-footer">
+<div th:if="${message} !=null">
+		<div class="card-footer bg-info text-white text-center">
+			<span th:text="${message}"></span>
+		</div>
+		</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<html xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+	<title>WhUserType EDIT</title>
+<link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+<div th:insert="fragments/commonui :: userhead"></div>
+<div th:insert="fragments/commonui :: usermenu"> </div>
+	<div class="container">
+		<div class="card">
+			<div class="card-header">
+				<h3 style="font-family: Lucida Console, Courier New, monospace;color:White;">WhUser Type EDIT</h3>
+			</div>
+			<div class="card-body">
+				<form th:action="@{/whuserType/update}" method="POST" th:object="${whUserType}" id="whuserTypeEditform">
+				<div class="row">
+					<div class="col-2">
+						<label for="id">User ID</label>
+					</div>
+					<div class="col-1">
+						<input type="text" th:field="*{id}" readonly="readonly">
+					</div>
+				</div>
+					<!-- -----ROW1----- -->
+					<div class="row">
+						<div class="col-2">
+							<label for="userType">User Type</label>
+						</div>
+
+						<div class="col-3">
+							<input type="radio" th:field="*{userType}" name="userType" value="vendor" />Vendor
+							<input type="radio" th:field="*{userType}" name="userType" value="customer" />Customer
+						</div>
+
+						<div class="col-2">
+							<span id="userTypeErr"></span>
+						</div>
+					</div>
+					<!-- ROW2 -->
+					<div class="row">
+						<div class="col-2">
+							<label for="userCode">User Code</label>
+						</div>
+						<div class="col-3">
+							<input type="text" th:field="*{userCode}" class="form-control" />
+						</div>
+						<div class="col-2">
+							<span id="userCodeErr"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<label for="userFor">User for</label>
+						</div>
+						<div class="col-3">
+							<input type="text" th:field="*{userFor}" class="form-control" readonly id="userFor"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<label for="userMail">User Email</label>
+						</div>
+						<div class="col-3">
+							<input type="text" th:field="*{userMail}" class="form-control" />
+						</div>
+						<div class="col-2">
+							<span id="userEmailErr"></span>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-2">
+							<label for="userContact">User Contact</label>
+						</div>
+						<div class="col-3">
+							<textArea  th:field="*{userContact}" class="form-control"></textArea>
+						</div>
+						<div class="col-4">
+							<span id="userContactErr"></span>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-2">
+							<label for="userIdType">User ID Type</label>
+						</div>
+						<div class="col-3">
+					      <select  th:field="*{userIdType}" name="userIdType" id="userIdType" class="form-control" >
+								<option value="--select--" >--select--</option>
+								<option value="Aadhar Card">Aadhar Card</option>
+								<option value="PAN Card" > PAN CARD</option>
+								<option value="Voter ID"> Voter ID</option>
+								<option value="OTHER">OTHER</option>
+							</select>
+						</div>
+						<div class="col-2">
+							<span id="userIdTypeErr"></span>
+						</div>
+					</div>
+			
+					<div class="row">
+						<div class="col-2">
+							<label>If Other</label>
+						</div>
+						<div class="col-3">
+							<input type="text" th:field ="*{ifOther}" class="form-control" readonly id="ifother" name="ifother" />
+						</div>
+						<div class="col-4">
+							<span id="ifOtherErr"></span>
+						</div>
+					</div> 
+					
+					<div class="row">
+						<div class="col-2">
+							<label for="IdNumber">ID Number</label>
+						</div>
+						<div class="col-3">
+							<input type="text" th:field="*{IdNumber}" class="form-control" />
+						</div>
+						<div class="col-4">
+							<span id="idNumErr"></span>
+						</div>
+					</div>
+					<input type="submit" value="Update WhUsertype" class="btn btn-success">
+				</form>
+			</div>
+			<!-- card footer section -->
+			<div th:if="${message} !=null">
+				<div class="card-footer bg-info text-white text-center">
+					<span th:text="${message}"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		
+		$(document).ready(function (){
+			$('input[type="radio"][name="userType"]').change(function(){
+				autoFillUserFor();
+			});
+			$('input[type="radio"][name="userType"]').change(function(){
+							autoFillUserFor();
+						});
+						
+			function autoFillUserFor(){
+				
+				var val=$('input[type="radio"][name="userType"]:checked').val();
+				if(val =='vendor')
+				{
+					$("#userFor").val('Purchase');
+				}else if(val =='customer'){
+					$("#userFor").val('Sale');
+				}
+				
+			}
+			//ifother selected 
+			$("#userIdType").change(function () 
+			{
+				var val=$("#userIdType").val();
+				
+				if(val=='OTHER')
+				{ 
+					$("#ifother").removeAttr("readOnly");
+				}else{
+					$("#ifother").attr("readOnly","true");
+					$("#ifother").val("");
+				}
+				
+			});
+			
+			});
+						
+		
+	</script>
+</body>
+
+</html>
